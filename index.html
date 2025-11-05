@@ -1,0 +1,291 @@
+<!--
+  File: jual-beli-musang.html
+  Deskripsi: Template single-file HTML + CSS + JS untuk halaman jual-beli musang.
+  Catatan penting: Pastikan kegiatan jual-beli hewan mematuhi hukum, perizinan, dan standar kesejahteraan hewan setempat.
+  Ganti gambar, data, dan endpoint form sesuai kebutuhan backend Anda.
+-->
+
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pasar Musang — Jual & Beli</title>
+  <style>
+    :root{ --accent:#2b8aef; --muted:#666; --card:#fff; --bg:#f4f6fb }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Helvetica,Arial,sans-serif; margin:0; background:var(--bg); color:#111}
+    header{background:linear-gradient(90deg,#fff 0%, #f8fbff 100%); padding:24px 20px; border-bottom:1px solid #e6eef9}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    h1{margin:0;font-size:22px}
+    .sub{color:var(--muted);font-size:14px}
+
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:18px}
+
+    /* product list */
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(20,30,80,0.06);border:1px solid rgba(15,30,70,0.03)}
+    .img{height:160px;border-radius:8px;background-size:cover;background-position:center;margin-bottom:10px}
+    .title{font-weight:600;font-size:15px}
+    .meta{font-size:13px;color:var(--muted);margin-top:6px}
+    .price{color:var(--accent);font-weight:700;margin-top:8px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;border:0;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-outline{background:transparent;border:1px solid #cfe5ff;color:var(--accent)}
+
+    /* sidebar */
+    aside{position:sticky;top:18px}
+    .panel{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(20,30,80,0.04)}
+    .search{display:flex;gap:8px}
+    input[type=text],select{flex:1;padding:10px;border-radius:8px;border:1px solid #e6eef9}
+
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px}
+    .modal{max-width:700px;width:100%;background:var(--card);border-radius:12px;padding:18px}
+    .modal-grid{display:flex;gap:12px}
+    .modal .img{height:240px;flex:0 0 48%}
+    .modal .info{flex:1}
+
+    footer{margin-top:40px;padding:18px 0;color:var(--muted);font-size:13px;text-align:center}
+
+    /* responsive */
+    @media (max-width:900px){.grid{grid-template-columns:1fr}.modal-grid{flex-direction:column}.modal .img{height:200px;width:100%}}
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .row{display:flex;gap:10px;align-items:center}
+    .badge{background:#eef6ff;padding:6px 8px;border-radius:999px;font-size:13px;color:var(--accent)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container row" style="justify-content:space-between;align-items:center">
+      <div>
+        <h1>Pasar Musang</h1>
+        <div class="sub">Platform sederhana untuk memajang & mencari musang — contoh template HTML.</div>
+      </div>
+      <div class="row">
+        <a class="btn btn-outline" onclick="openSellerForm()">Daftar Jual</a>
+        <a class="btn btn-primary" href="#listings">Lihat Listing</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="grid">
+      <section>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700">Cari musang sesuai kebutuhan</div>
+            <div class="muted" style="font-size:13px">Filter, lihat detail, hubungi penjual langsung.</div>
+          </div>
+          <div class="badge">Perhatian: patuhi hukum setempat</div>
+        </div>
+
+        <h2 id="listings" style="margin-top:18px">Listing Terbaru</h2>
+
+        <div class="products" id="productGrid">
+          <!-- product cards diisi lewat JS -->
+        </div>
+      </section>
+
+      <aside>
+        <div class="panel">
+          <div style="font-weight:700;margin-bottom:8px">Filter & Pencarian</div>
+          <div class="search">
+            <input type="text" id="q" placeholder="Cari (mis. jenis, lokasi)" oninput="applyFilters()">
+            <select id="sort" onchange="applyFilters()">
+              <option value="new">Terbaru</option>
+              <option value="price-asc">Harga: Rendah → Tinggi</option>
+              <option value="price-desc">Harga: Tinggi → Rendah</option>
+            </select>
+          </div>
+          <hr style="margin:12px 0">
+          <div style="font-weight:700;margin-bottom:8px">Kontak & Bantuan</div>
+          <div class="muted">Butuh bantuan? Hubungi admin: <br><strong>+62 812-3456-7890</strong></div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="panel">
+          <div style="font-weight:700;margin-bottom:8px">Tentang</div>
+          <div class="muted" style="font-size:13px">Template ini hanya contoh. Untuk fitur transaksi nyata, sambungkan backend, pembayaran, dan verifikasi penjual.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      &copy; <span id="year"></span> Pasar Musang • Pastikan legalitas & kesejahteraan hewan.
+    </footer>
+  </main>
+
+  <!-- Modal detail produk -->
+  <div id="modal" class="modal-backdrop" onclick="closeModal(event)">
+    <div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:700" id="m-title">Detail Musang</div>
+        <button class="btn" onclick="closeModal(event)">Tutup ✕</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="img" id="m-img" style="background-image:url('https://placehold.co/600x400')"></div>
+        <div class="info">
+          <div style="font-size:14px;color:var(--muted)" id="m-type">Jenis: -</div>
+          <div style="margin-top:8px" id="m-desc">Deskripsi singkat.</div>
+          <div class="price" id="m-price">Rp 0</div>
+          <div class="meta" id="m-location">Lokasi: -</div>
+          <div style="margin-top:12px">
+            <a class="btn btn-primary" id="contactBtn">Hubungi Penjual</a>
+            <a class="btn" style="margin-left:8px" onclick="showReportForm()">Laporkan</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Seller form modal (simplified) -->
+  <div id="sellerForm" class="modal-backdrop" onclick="closeSellerForm(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:700">Form Daftar Jual</div>
+        <button class="btn" onclick="closeSellerForm(event)">Tutup ✕</button>
+      </div>
+      <form id="formSeller" onsubmit="submitListing(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <input type="text" id="s-name" placeholder="Nama penjual" required>
+          <input type="text" id="s-phone" placeholder="No. HP" required>
+          <input type="text" id="s-type" placeholder="Jenis musang" required>
+          <input type="text" id="s-location" placeholder="Kota/Daerah" required>
+        </div>
+        <textarea id="s-desc" placeholder="Deskripsi singkat" style="width:100%;margin-top:8px;padding:8px;border-radius:8px;border:1px solid #e6eef9" required></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <input type="number" id="s-price" placeholder="Harga (Rp)" required style="padding:8px;border-radius:8px;border:1px solid #e6eef9;flex:1">
+          <input type="url" id="s-img" placeholder="URL gambar (opsional)" style="padding:8px;border-radius:8px;border:1px solid #e6eef9;flex:1">
+        </div>
+        <div style="text-align:right;margin-top:10px">
+          <button class="btn" type="button" onclick="closeSellerForm(event)">Batal</button>
+          <button class="btn btn-primary" type="submit">Pasang Listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- minimal report form (example) -->
+  <div id="reportForm" class="modal-backdrop" onclick="closeReportForm(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:700">Laporkan Listing</div>
+        <button class="btn" onclick="closeReportForm(event)">Tutup ✕</button>
+      </div>
+      <form onsubmit="submitReport(event)">
+        <textarea id="r-desc" placeholder="Jelaskan masalah" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef9" required></textarea>
+        <div style="text-align:right;margin-top:10px">
+          <button class="btn" type="button" onclick="closeReportForm(event)">Batal</button>
+          <button class="btn btn-primary" type="submit">Kirim Laporan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const sampleProducts = [
+      {id:1,name:'Musang Kumbang',type:'Kumbang (Arctogalidia)',price:3500000,location:'Yogyakarta',img:'https://placehold.co/600x400?text=Musang+1',desc:'Musang sehat, umur 1 tahun, sudah jinak.'},
+      {id:2,name:'Musang Kalem',type:'Kalem',price:2500000,location:'Bandung',img:'https://placehold.co/600x400?text=Musang+2',desc:'Musang remaja, cocok untuk koleksi.'},
+      {id:3,name:'Anak Musang',type:'Anak',price:1500000,location:'Surabaya',img:'https://placehold.co/600x400?text=Musang+3',desc:'Anak musang, lincah dan aktif.'}
+    ];
+
+    let products = [...sampleProducts];
+
+    function formatIDR(n){
+      return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function renderProducts(list){
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      list.forEach(p=>{
+        const el = document.createElement('div'); el.className='card';
+        el.innerHTML = `
+          <div class="img" style="background-image:url('${p.img}')"></div>
+          <div class="title">${p.name}</div>
+          <div class="meta">${p.type} • ${p.location}</div>
+          <div class="price">${formatIDR(p.price)}</div>
+          <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+            <a class="btn btn-outline" onclick="openModal(${p.id})">Lihat</a>
+            <a class="btn btn-primary" onclick="contactSeller(${p.id})">Hubungi</a>
+          </div>
+        `;
+        grid.appendChild(el);
+      })
+    }
+
+    function applyFilters(){
+      const q = document.getElementById('q').value.toLowerCase();
+      const sort = document.getElementById('sort').value;
+      let filtered = products.filter(p=> (p.name+ ' ' + p.type + ' ' + p.location + ' ' + p.desc).toLowerCase().includes(q));
+      if(sort === 'price-asc') filtered.sort((a,b)=>a.price-b.price);
+      if(sort === 'price-desc') filtered.sort((a,b)=>b.price-a.price);
+      if(sort === 'new') filtered = filtered; // placeholder
+      renderProducts(filtered);
+    }
+
+    function openModal(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
+      document.getElementById('m-title').textContent = p.name;
+      document.getElementById('m-img').style.backgroundImage = `url('${p.img}')`;
+      document.getElementById('m-type').textContent = 'Jenis: ' + p.type;
+      document.getElementById('m-desc').textContent = p.desc;
+      document.getElementById('m-price').textContent = formatIDR(p.price);
+      document.getElementById('m-location').textContent = 'Lokasi: ' + p.location;
+      document.getElementById('contactBtn').onclick = ()=> contactSeller(id);
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function closeModal(e){ document.getElementById('modal').style.display = 'none'; }
+
+    function contactSeller(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
+      // contoh: buka WhatsApp (nomor seharusnya disimpan dalam data listing nyata)
+      const nomor = '6281234567890';
+      const text = encodeURIComponent(`Halo, saya tertarik dengan listing "${p.name}" (ID ${p.id}). Apakah masih tersedia?`);
+      window.open(`https://wa.me/${nomor}?text=${text}`,'_blank');
+    }
+
+    function openSellerForm(){ document.getElementById('sellerForm').style.display = 'flex'; }
+    function closeSellerForm(e){ document.getElementById('sellerForm').style.display = 'none'; }
+
+    function submitListing(e){
+      e.preventDefault();
+      const name = document.getElementById('s-name').value.trim();
+      const phone = document.getElementById('s-phone').value.trim();
+      const type = document.getElementById('s-type').value.trim();
+      const location = document.getElementById('s-location').value.trim();
+      const desc = document.getElementById('s-desc').value.trim();
+      const price = parseInt(document.getElementById('s-price').value,10) || 0;
+      const img = document.getElementById('s-img').value || 'https://placehold.co/600x400?text=Musang';
+      const id = (products.reduce((m,x)=>Math.max(m,x.id),0) + 1);
+      const listing = {id,name,type,price,location,img,desc};
+      products.unshift(listing);
+      applyFilters();
+      closeSellerForm();
+      alert('Listing berhasil dipasang (ini hanya contoh — hubungkan ke backend untuk menyimpan secara permanen).');
+      document.getElementById('formSeller').reset();
+    }
+
+    // report
+    function showReportForm(){ document.getElementById('reportForm').style.display = 'flex'; }
+    function closeReportForm(e){ document.getElementById('reportForm').style.display = 'none'; }
+    function submitReport(e){ e.preventDefault(); closeReportForm(); alert('Laporan dikirim. Terima kasih.'); }
+
+    // close modal by Esc
+    window.addEventListener('keydown', (ev)=>{ if(ev.key === 'Escape'){ closeModal(); closeSellerForm(); closeReportForm(); } });
+
+    // init
+    renderProducts(products);
+  </script>
+</body>
+</html>
